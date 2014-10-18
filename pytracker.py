@@ -44,7 +44,7 @@ def TrackerDatetimeToYMD(pdt):
 class Tracker(object):
   """Tracker API."""
 
-  def __init__(self, project_id, auth,
+  def __init__(self, project_id, token,
                base_api_url=DEFAULT_BASE_API_URL):
     """Constructor.
 
@@ -53,7 +53,7 @@ class Tracker(object):
 
     Args:
       project_id: the Tracker ID (integer).
-      auth: a TrackerAuth instance.
+      token: your Pivotal Tracker API token.
       base_api_url: the base URL of the HTTP API (with trailing /).
     """
     self.project_id = project_id
@@ -62,7 +62,7 @@ class Tracker(object):
     cookies = cookielib.CookieJar()
     self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookies))
 
-    self.token = auth.EstablishAuthToken(self.opener)
+    self.token = token
 
   def _Api(self, request, method, body=None):
     url = self.base_api_url + 'projects/%d/%s' % (self.project_id,
