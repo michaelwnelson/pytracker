@@ -173,60 +173,8 @@ class Tracker(object):
     self._Api('stories/%d' % story_id, 'DELETE', '')
 
 
-class TrackerAuth(object):
-  """Abstract base class for establishing credentials for pytracker."""
-
-  def __init__(self, username, password):
-    self.username = username
-    self.password = password
-
-  def EstablishAuthToken(self, opener):
-    """Returns the value for use as the X-TrackerToken HTTP header, or None.
-
-    This method may mutate the cookie jar via opener.
-
-    Args:
-      opener: a urllib2.OpenerDirector instance that will be used for
-              subsequent HTTP API calls.
-    """
-    raise NotImplementedError()
-
-
-class TrackerAuthException(Exception):
-  """Raised when something goes wrong with authentication."""
-
-
-class NoTokensAvailableException(Exception):
-  """Raised when HostedTrackerAuth can't find any tokens for this user."""
-
-
 class TrackerApiException(Exception):
   """Raised when Tracker returns an error."""
-
-
-class HostedTrackerAuth(TrackerAuth):
-  """Authentication rules for hosted Tracker instances."""
-
-  def EstablishAuthToken(self, opener):
-    """Returns the first auth token returned by /services/tokens/active."""
-    url = 'https://www.pivotaltracker.com/services/tokens/active'
-    data = urllib.urlencode((('username', self.username),
-                             ('password', self.password)))
-    try:
-      req = opener.open(url, data)
-    except urllib2.HTTPError, e:
-      if e.code == 404:
-        raise NoTokensAvailableException(
-            'Did you create any?  Check https://www.pivotaltracker.com/profile')
-      else:
-        raise
-
-    res = req.read()
-
-    dom = minidom.parseString(res)
-    token = dom.getElementsByTagName('guid')[0].firstChild.data
-
-    return token
 
 
 class Story(object):
