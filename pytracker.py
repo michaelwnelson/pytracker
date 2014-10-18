@@ -29,7 +29,7 @@ from xml.dom import minidom
 import xml.parsers.expat
 import xml.sax.saxutils
 
-DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v2/'
+DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v5/'
 # Some fields specify UTC, some GMT?
 _TRACKER_DATETIME_RE = re.compile(r'^\d{4}/\d{2}/\d{2} .*(GMT|UTC)$')
 
@@ -49,7 +49,7 @@ class Tracker(object):
     """Constructor.
 
     If you are debugging API calls, you may want to use a non-HTTPS API URL:
-      base_api_url="http://www.pivotaltracker.com/services/v2/"
+      base_api_url="http://www.pivotaltracker.com/services/v5/"
 
     Args:
       project_id: the Tracker ID (integer).
