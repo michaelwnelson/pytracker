@@ -28,6 +28,7 @@ import xml.dom
 from xml.dom import minidom
 import xml.parsers.expat
 import xml.sax.saxutils
+import json
 
 DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v5/'
 # Some fields specify UTC, some GMT?
@@ -123,8 +124,8 @@ class Tracker(object):
     return lst
 
   def GetStory(self, story_id):
-    story_xml = self._Api('stories/%d' % story_id, 'GET')
-    return Story.FromXml(story_xml)
+    story_json = self._Api('stories/%d' % story_id, 'GET')
+    return Story.FromJson(json.loads(story_json))
 
   def AddComment(self, story_id, comment):
     comment = '<note><text>%s</text></note>' % xml.sax.saxutils.escape(comment)
@@ -226,6 +227,45 @@ class Story(object):
 
   def __str__(self):
     return "Story(%r)" % self.__dict__
+
+  @staticmethod
+  def FromJson(as_json):
+    """Parse a JSON string into a Story.
+
+    Args:
+      as_json: a full JSON object from the Tracker API.
+    Returns:
+      Story()
+    """
+    story = Story()
+    story.story_id = Story._GetDataFromIndex(as_json, 'id')
+    story.url = Story._GetDataFromIndex(as_json, 'url')
+    story.owned_by = Story._GetDataFromIndex(as_json, 'owner_ids')
+    story.created_at = Story._GetDataFromIndex(as_json, 'created_at')
+    story.requested_by = Story._GetDataFromIndex(as_json, 'requested_by_id')
+
+    iteration = Story._GetDataFromIndex(as_json, 'number')
+    if iteration:
+      story.iteration_number = int(iteration)
+
+    story.SetStoryType(Story._GetDataFromIndex(as_json, 'story_type'))
+    story.SetCurrentState(Story._GetDataFromIndex(as_json, 'current_state'))
+    story.SetName(Story._GetDataFromIndex(as_json, 'name'))
+    story.SetDescription(Story._GetDataFromIndex(as_json, 'description'))
+
+    deadline = Story._GetDataFromIndex(as_json, 'deadline')
+    if deadline:
+      story.SetDeadline(deadline)
+
+    estimate = Story._GetDataFromIndex(as_json, 'estimate')
+    if estimate is not None:
+      story.estimate = estimate
+
+    labels = Story._GetDataFromIndex(as_json, 'labels')
+    if labels is not None:
+      story.AddLabelsFromArray(labels)
+
+    return story
 
   @staticmethod
   def FromXml(as_xml):
