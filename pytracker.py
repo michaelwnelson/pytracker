@@ -305,6 +305,25 @@ class Story(object):
     return story
 
   @staticmethod
+  def _GetDataFromIndex(json, index):
+    """Retrieve value associated with the index, if any.
+
+    Args:
+      json: JSON object
+      index: name of the desired index
+
+    Returns:
+      None (if index doesn't exist), empty string (if index exists, but value is
+      empty), or the index value.
+    """
+    if not index in json:
+      return None
+    elif not json[index]:
+      return ''
+    else:
+      return json.get(index)
+
+  @staticmethod
   def _GetDataFromTag(dom, tag):
     """Retrieve value associated with the tag, if any.
 
