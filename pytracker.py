@@ -440,6 +440,13 @@ class Story(object):
       except KeyError:
         pass
 
+  def AddLabelsFromArray(self, labels):
+    """Adds a set of labels from a JavaScript array of objects."""
+    if self.labels is None:
+      self.labels = set()
+
+    self.labels = self.labels.union([x["name"].strip() for x in labels])
+
   def AddLabelsFromString(self, labels):
     """Adds a set of labels from a comma-delimited string (see class caveat)."""
     if self.labels is None:
