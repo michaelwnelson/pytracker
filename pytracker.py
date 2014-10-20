@@ -52,6 +52,11 @@ class Tracker(object):
     If you are debugging API calls, you may want to use a non-HTTPS API URL:
       base_api_url="http://www.pivotaltracker.com/services/v5/"
 
+    Note that a project owner can prevent non-HTTPS access to a project via API
+    versions older than V5. You can check this setting under your project
+    settings in the section Access:
+      https://www.pivotaltracker.com/projects/PROJECT_ID/settings
+
     Args:
       project_id: the Tracker ID (integer).
       token: your Pivotal Tracker API token.
