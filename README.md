@@ -12,6 +12,17 @@ The goal of this project is to bring the library up-to-date with v5 of Pivtoal T
 
 Once the project is functioning as expected with v5, I'll look in to extending existing or creating new features.
 
+## Contributing
+Currently the goal is to convert everything from XML to JSON.
+There are new endpoints to utilize in v5 and eventually the application will be extended to utilize them.
+If you would like to contribute a new feature or bug fix:
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+3. Push to the branch (`git push origin my-new-feature`)
+4. Create a new Pull Request
+
 [1]: http://www.pivotaltracker.com/
 [2]: https://www.pivotaltracker.com/help/api
 [3]: https://code.google.com/p/pytracker/
