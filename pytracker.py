@@ -101,8 +101,15 @@ class Tracker(object):
     else:
       output = self._Api('stories', 'GET')
 
-    # Hack: throw an exception if we didn't get valid XML.
-    xml.parsers.expat.ParserCreate('utf-8').Parse(output, True)
+    """Confirm data is valid JSON.
+
+    json.loads throws a ValueError if the output is not valid JSON.
+    """
+    try:
+      json.loads(output)
+    except ValueError, e:
+      message = "JSON was not valid. \nError: %s" % e
+      raise TrackerApiException(message)
 
     return output
 
