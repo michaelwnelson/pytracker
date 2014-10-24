@@ -127,12 +127,12 @@ class Tracker(object):
     Returns:
       List of Story().
     """
-    stories = self._ApiQueryStories(filt)
-    parsed = xml.dom.minidom.parseString(stories)
-    els = parsed.getElementsByTagName('story')
+    data = self._ApiQueryStories(filt)
+    stories = json.loads(data)
     lst = []
-    for el in els:
-      lst.append(Story.FromXml(el.toxml()))
+    for story in stories:
+      lst.append(Story.FromJson(story))
+
     return lst
 
   def GetStory(self, story_id):
