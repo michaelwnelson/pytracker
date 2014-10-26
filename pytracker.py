@@ -356,17 +356,14 @@ class Story(object):
       return ''
 
   @staticmethod
-  def _ParseDatetimeIntoSecs(dom, tag):
-    """Returns the tag body parsed into seconds-since-epoch."""
-    el = dom.getElementsByTagName(tag)
-    if not el:
-      return None
-    assert el[0].getAttribute('type') == 'datetime'
-    data = el[0].firstChild.data
+  def _ParseDatetimeIntoSecs(data):
+    """Returns the time parsed into seconds-since-epoch."""
 
+    if not data:
+      return None
     # Tracker emits datetime strings in UTC or GMT.
     # The [:-4] strips the timezone indicator
-    when = time.strptime(data[:-4], '%Y/%m/%d %H:%M:%S')
+    when = time.strptime(data[:-2], '%Y-%m-%dT%H:%M:%S')
     # calendar.timegm treats the tuple as GMT
     return calendar.timegm(when)
 
