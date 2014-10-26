@@ -269,7 +269,7 @@ class Story(object):
 
     deadline = Story._GetDataFromIndex(as_json, 'deadline')
     if deadline:
-      story.SetDeadline(deadline)
+      story.SetDeadline(Story._ParseDatetimeIntoSecs(deadline))
 
     estimate = Story._GetDataFromIndex(as_json, 'estimate')
     if estimate is not None:
