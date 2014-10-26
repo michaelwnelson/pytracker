@@ -192,7 +192,7 @@ class Story(object):
   operations (constructed with default constructor).
 
   Internally, Story uses None to indicate that the client has not specified a
-  value for the field or that it has not been parsed from XML.  This enables us
+  value for the field or that it has not been parsed from JSON.  This enables us
   to use the same Story object to define an update to multiple stories, without
   requiring that the client first fetch, parse, and update an existing story.
   This is supported by all mutable fields except for labels, which are
@@ -202,7 +202,7 @@ class Story(object):
   are not lost.
   """
 
-  # Fields that can be treated as strings when embedding in XML.
+  # Fields that can be treated as strings when embedding in JSON.
   UPDATE_FIELDS = ('story_type', 'current_state', 'name',
                    'description', 'estimate', 'requested_by', 'owned_by')
 
