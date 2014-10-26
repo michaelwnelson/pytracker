@@ -113,9 +113,6 @@ class Tracker(object):
 
     return output
 
-  def GetStoriesXml(self):
-    return self._ApiQueryStories()
-
   def GetStories(self, filt=None):
     """Fetch all Stories that satisfy the filter.
 
