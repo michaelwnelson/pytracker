@@ -395,13 +395,6 @@ class Story(object):
 
     self.labels = self.labels.union([x["name"].strip() for x in labels])
 
-  def AddLabelsFromString(self, labels):
-    """Adds a set of labels from a comma-delimited string (see class caveat)."""
-    if self.labels is None:
-      self.labels = set()
-
-    self.labels = self.labels.union([x.strip() for x in labels.split(',')])
-
   def GetLabelsAsString(self):
     """Returns the labels as a comma delimited list of strings."""
     if self.labels is None:
