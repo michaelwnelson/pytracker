@@ -116,9 +116,6 @@ class Tracker(object):
   def GetStoriesXml(self):
     return self._ApiQueryStories()
 
-  def GetReleaseStoriesXml(self):
-    return self._ApiQueryStories('type:release')
-
   def GetStories(self, filt=None):
     """Fetch all Stories that satisfy the filter.
 
