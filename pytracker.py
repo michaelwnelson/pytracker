@@ -282,43 +282,6 @@ class Story(object):
     return story
 
   @staticmethod
-  def FromXml(as_xml):
-    """Parses an XML string into a Story.
-
-    Args:
-      as_xml: a full XML document from the Tracker API.
-    Returns:
-      Story()
-    """
-    parsed = minidom.parseString(as_xml.encode('utf-8'))
-    story = Story()
-    story.story_id = int(parsed.getElementsByTagName('id')[0].firstChild.data)
-    story.url = parsed.getElementsByTagName('url')[0].firstChild.data
-    story.owned_by = Story._GetDataFromTag(parsed, 'owned_by')
-    story.created_at = Story._ParseDatetimeIntoSecs(parsed, 'created_at')
-    story.requested_by = Story._GetDataFromTag(parsed, 'requested_by')
-    iteration = Story._GetDataFromTag(parsed, 'number')
-    if iteration:
-      story.iteration_number = int(iteration)
-
-    story.SetStoryType(
-        parsed.getElementsByTagName('story_type')[0].firstChild.data)
-    story.SetCurrentState(
-        parsed.getElementsByTagName('current_state')[0].firstChild.data)
-    story.SetName(Story._GetDataFromTag(parsed, 'name'))
-    story.SetDescription(Story._GetDataFromTag(parsed, 'description'))
-    story.SetDeadline(Story._ParseDatetimeIntoSecs(parsed, 'deadline'))
-
-    estimate = Story._GetDataFromTag(parsed, 'estimate')
-    if estimate is not None:
-        story.estimate = estimate
-    labels = Story._GetDataFromTag(parsed, 'labels')
-    if labels is not None:
-      story.AddLabelsFromString(labels)
-
-    return story
-
-  @staticmethod
   def _GetDataFromIndex(json, index):
     """Retrieve value associated with the index, if any.
 
