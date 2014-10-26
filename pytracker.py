@@ -301,26 +301,6 @@ class Story(object):
       return json.get(index)
 
   @staticmethod
-  def _GetDataFromTag(dom, tag):
-    """Retrieve value associated with the tag, if any.
-
-    Args:
-      dom: XML DOM object
-      tag: name of the desired tag
-
-    Returns:
-      None (if tag doesn't exist), empty string (if tag exists, but body is
-      empty), or the tag body.
-    """
-    tags = dom.getElementsByTagName(tag)
-    if not tags:
-      return None
-    elif tags[0].hasChildNodes():
-      return tags[0].firstChild.data
-    else:
-      return ''
-
-  @staticmethod
   def _ParseDatetimeIntoSecs(data):
     """Returns the time parsed into seconds-since-epoch."""
 
