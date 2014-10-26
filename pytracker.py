@@ -253,7 +253,6 @@ class Story(object):
     story.story_id = Story._GetDataFromIndex(as_json, 'id')
     story.url = Story._GetDataFromIndex(as_json, 'url')
     story.owned_by = Story._GetDataFromIndex(as_json, 'owner_ids')
-    story.created_at = Story._GetDataFromIndex(as_json, 'created_at')
     story.requested_by = Story._GetDataFromIndex(as_json, 'requested_by_id')
 
     iteration = Story._GetDataFromIndex(as_json, 'number')
@@ -264,6 +263,9 @@ class Story(object):
     story.SetCurrentState(Story._GetDataFromIndex(as_json, 'current_state'))
     story.SetName(Story._GetDataFromIndex(as_json, 'name'))
     story.SetDescription(Story._GetDataFromIndex(as_json, 'description'))
+
+    created_at = Story._GetDataFromIndex(as_json, 'created_at')
+    story.created_at = Story._ParseDatetimeIntoSecs(created_at)
 
     deadline = Story._GetDataFromIndex(as_json, 'deadline')
     if deadline:
