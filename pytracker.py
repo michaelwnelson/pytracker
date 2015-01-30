@@ -247,7 +247,15 @@ class Story(object):
     story.story_id = Story._GetDataFromIndex(as_json, 'id')
     story.url = Story._GetDataFromIndex(as_json, 'url')
     story.owned_by = Story._GetDataFromIndex(as_json, 'owner_ids')
-    story.requested_by = Story._GetDataFromIndex(as_json, 'requested_by_id')
+
+    # Create variables for all data available from requested_by
+    requested_by = Story._GetDataFromIndex(as_json, 'requested_by')
+    story.requested_by_kind = Story._GetDataFromIndex(requested_by, 'kind')
+    story.requested_by_id = Story._GetDataFromIndex(requested_by, 'id')
+    story.requested_by_name = Story._GetDataFromIndex(requested_by, 'name')
+    story.requested_by_email = Story._GetDataFromIndex(requested_by, 'email')
+    story.requested_by_initials = Story._GetDataFromIndex(requested_by, 'initials')
+    story.requested_by_username = Story._GetDataFromIndex(requested_by, 'username')
 
     iteration = Story._GetDataFromIndex(as_json, 'number')
     if iteration:
