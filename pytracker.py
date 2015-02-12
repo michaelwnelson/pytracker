@@ -71,8 +71,7 @@ class Tracker(object):
     self.token = token
 
   def _Api(self, request, method, body=None):
-    url = self.base_api_url + 'projects/%d/%s' % (self.project_id,
-                                                  request)
+    url = self.base_api_url + 'projects/%d/%s' % (self.project_id, request)
 
     headers = {}
     if self.token:
@@ -82,7 +81,7 @@ class Tracker(object):
       # Do a GET
       req = urllib2.Request(url, None, headers)
     else:
-      headers['Content-Type'] = 'application/xml'
+      headers['Content-Type'] = 'application/json'
       req = urllib2.Request(url, body, headers)
       req.get_method = lambda: method
 
