@@ -134,8 +134,8 @@ class Tracker(object):
     return Story.FromJson(json.loads(story_json))
 
   def AddComment(self, story_id, comment):
-    comment = '<note><text>%s</text></note>' % xml.sax.saxutils.escape(comment)
-    self._Api('stories/%d/notes' % story_id, 'POST', comment)
+    comment = json.dumps({'text':comment})
+    self._Api('stories/%d/comments' % int(story_id), 'POST', comment)
 
   def AddNewStory(self, story):
     """Persists a new story to Tracker and returns the new Story."""
