@@ -98,17 +98,8 @@ class Tracker(object):
     else:
       output = self._Api('stories?fields=:default,requested_by', 'GET')
 
-    """Confirm data is valid JSON.
-
-    json.loads throws a ValueError if the output is not valid JSON.
-    """
-    try:
-      json.loads(output)
-    except ValueError, e:
-      message = "JSON was not valid. \nError: %s" % e
-      raise TrackerApiException(message)
-
-    return output
+    if(self._ValidateJson(output)):
+      return output
 
   def GetStories(self, filt=None):
     """Fetch all Stories that satisfy the filter.
