@@ -56,6 +56,18 @@ class Tracker(object):
 
     self.token = token
 
+  def _ValidateJson(self, data):
+    """Confirm data is valid JSON.
+      json.loads throws a ValueError if the output is not valid JSON.
+    """
+    try:
+      json.loads(data)
+      return True
+    except ValueError, e:
+      message = "JSON was not valid. \nError: %s" % e
+      raise TrackerApiException(message)
+      return False
+
   def _Api(self, request, method, body=None):
     url = self.base_api_url + 'projects/%d/%s' % (self.project_id, request)
 
