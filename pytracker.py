@@ -17,6 +17,7 @@
 """pytracker is a Python wrapper around the Tracker API."""
 
 __author__ = 'dcoker@google.com (Doug Coker)'
+__maintainer__ = 'michaelwnelson (Michael Nelson)'
 
 import calendar
 import cookielib
