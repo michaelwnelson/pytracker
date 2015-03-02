@@ -23,8 +23,12 @@ If you would like to contribute a new feature or bug fix:
 3. Push to the branch (`git push origin my-new-feature`)
 4. Create a new Pull Request
 
+## License
+[Apache License 2.0][6]
+
 [1]: http://www.pivotaltracker.com/
 [2]: https://www.pivotaltracker.com/help/api
 [3]: https://code.google.com/p/pytracker/
 [4]: https://code.google.com/p/pytracker/source/detail?r=4c3c64281aca142fcac1803e856ee8ba771c68a3
 [5]: http://www.pivotaltracker.com/community/tracker-blog/pivotal-tracker-api-v2-removal
+[6]: http://www.apache.org/licenses/LICENSE-2.0
