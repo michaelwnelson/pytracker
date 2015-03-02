@@ -32,16 +32,6 @@ import xml.sax.saxutils
 import json
 
 DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v5/'
-# Some fields specify UTC, some GMT?
-_TRACKER_DATETIME_RE = re.compile(r'^\d{4}/\d{2}/\d{2} .*(GMT|UTC)$')
-
-
-def TrackerDatetimeToYMD(pdt):
-  assert _TRACKER_DATETIME_RE.match(pdt)
-  pdt = pdt.split()[0]
-  pdt = pdt.replace('/', '-')
-  return pdt
-
 
 class Tracker(object):
   """Tracker API."""
