@@ -25,10 +25,6 @@ import re
 import time
 import urllib
 import urllib2
-import xml.dom
-from xml.dom import minidom
-import xml.parsers.expat
-import xml.sax.saxutils
 import json
 
 DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v5/'
@@ -126,44 +122,6 @@ class Tracker(object):
   def AddComment(self, story_id, comment):
     comment = json.dumps({'text':comment})
     self._Api('stories/%d/comments' % int(story_id), 'POST', comment)
-
-  def AddNewStory(self, story):
-    """Persists a new story to Tracker and returns the new Story."""
-    story_xml = story.ToXml()
-    res = self._Api('stories', 'POST', story_xml)
-    story = Story.FromXml(res)
-    return story
-
-  def UpdateStoryById(self, story_id, story):
-    """Persist changes to an existing story to Tracker.
-
-    Use this method if you are changing a story without first retreiving the
-    story.
-
-    Args:
-      story_id: The ID of the story to mutate
-      story: The Story containing values to change.
-    Returns:
-      The updated Story().
-    """
-    story_xml = story.ToXml()
-    res = self._Api('stories/%d' % story_id, 'PUT', story_xml)
-    return Story.FromXml(res)
-
-  def UpdateStory(self, story):
-    """Persists changes to an existing story to Tracker.
-
-    Use this method if you have a full Story object created by one of the query
-    methods.
-
-    Args:
-      story: a Story()
-    Returns:
-      The updated Story().
-    """
-    story_xml = story.ToXml()
-    res = self._Api('stories/%d' % story.GetStoryId(), 'PUT', story_xml)
-    return Story.FromXml(res)
 
   def DeleteStory(self, story_id):
     """Deletes a story by story ID."""
@@ -400,42 +358,3 @@ class Story(object):
     lst = list(self.labels)
     lst.sort()
     return ','.join(lst)
-
-  def ToXml(self):
-    """Converts this Story to an XML string."""
-    doc = xml.dom.getDOMImplementation().createDocument(None, 'story', None)
-    story = doc.getElementsByTagName('story')[0]
-
-    # Most fields are just simple strings or ints, so we treat them all in the
-    # same way.
-    for field_name in self.UPDATE_FIELDS:
-      v = getattr(self, field_name)
-      if v is not None:
-        new_tag = doc.createElement(field_name)
-        new_tag.appendChild(doc.createTextNode(unicode(v)))
-        story.appendChild(new_tag)
-
-    # Labels are represented internally as sets.
-    if self.labels:
-      labels_tag = doc.createElement('labels')
-      labels_tag.appendChild(doc.createTextNode(self.GetLabelsAsString()))
-      story.appendChild(labels_tag)
-
-    # Dates are special
-    DATE_FORMAT = '%Y/%m/%d %H:%M:%S UTC'
-
-    if self.deadline:
-      formatted = time.strftime(DATE_FORMAT, time.gmtime(self.deadline))
-      deadline_tag = doc.createElement('deadline')
-      deadline_tag.setAttribute('type', 'datetime')
-      deadline_tag.appendChild(doc.createTextNode(formatted))
-      story.appendChild(deadline_tag)
-
-    if self.created_at:
-      formatted = time.strftime(DATE_FORMAT, time.gmtime(self.created_at))
-      created_at_tag = doc.createElement('created_at')
-      created_at_tag.setAttribute('type', 'datetime')
-      created_at_tag.appendChild(doc.createTextNode(formatted))
-      story.appendChild(created_at_tag)
-
-    return doc.toxml('utf-8')
