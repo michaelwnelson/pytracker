@@ -213,63 +213,44 @@ class Story(object):
       Story()
     """
     story = Story()
-    story.story_id = Story._GetDataFromIndex(as_json, 'id')
-    story.url = Story._GetDataFromIndex(as_json, 'url')
-    story.owned_by = Story._GetDataFromIndex(as_json, 'owner_ids')
+    story.story_id = GetDataFromIndex(as_json, 'id')
+    story.url = GetDataFromIndex(as_json, 'url')
+    story.owned_by = GetDataFromIndex(as_json, 'owner_ids')
 
     # Create variables for all data available from requested_by
-    requested_by = Story._GetDataFromIndex(as_json, 'requested_by')
-    story.requested_by_kind = Story._GetDataFromIndex(requested_by, 'kind')
-    story.requested_by_id = Story._GetDataFromIndex(requested_by, 'id')
-    story.requested_by_name = Story._GetDataFromIndex(requested_by, 'name')
-    story.requested_by_email = Story._GetDataFromIndex(requested_by, 'email')
-    story.requested_by_initials = Story._GetDataFromIndex(requested_by, 'initials')
-    story.requested_by_username = Story._GetDataFromIndex(requested_by, 'username')
+    requested_by = GetDataFromIndex(as_json, 'requested_by')
+    story.requested_by_kind = GetDataFromIndex(requested_by, 'kind')
+    story.requested_by_id = GetDataFromIndex(requested_by, 'id')
+    story.requested_by_name = GetDataFromIndex(requested_by, 'name')
+    story.requested_by_email = GetDataFromIndex(requested_by, 'email')
+    story.requested_by_initials = GetDataFromIndex(requested_by, 'initials')
+    story.requested_by_username = GetDataFromIndex(requested_by, 'username')
 
-    iteration = Story._GetDataFromIndex(as_json, 'number')
+    iteration = GetDataFromIndex(as_json, 'number')
     if iteration:
       story.iteration_number = int(iteration)
 
-    story.SetStoryType(Story._GetDataFromIndex(as_json, 'story_type'))
-    story.SetCurrentState(Story._GetDataFromIndex(as_json, 'current_state'))
-    story.SetName(Story._GetDataFromIndex(as_json, 'name'))
-    story.SetDescription(Story._GetDataFromIndex(as_json, 'description'))
+    story.SetStoryType(GetDataFromIndex(as_json, 'story_type'))
+    story.SetCurrentState(GetDataFromIndex(as_json, 'current_state'))
+    story.SetName(GetDataFromIndex(as_json, 'name'))
+    story.SetDescription(GetDataFromIndex(as_json, 'description'))
 
-    created_at = Story._GetDataFromIndex(as_json, 'created_at')
+    created_at = GetDataFromIndex(as_json, 'created_at')
     story.created_at = Story._ParseDatetimeIntoSecs(created_at)
 
-    deadline = Story._GetDataFromIndex(as_json, 'deadline')
+    deadline = GetDataFromIndex(as_json, 'deadline')
     if deadline:
       story.SetDeadline(Story._ParseDatetimeIntoSecs(deadline))
 
-    estimate = Story._GetDataFromIndex(as_json, 'estimate')
+    estimate = GetDataFromIndex(as_json, 'estimate')
     if estimate is not None:
       story.estimate = estimate
 
-    labels = Story._GetDataFromIndex(as_json, 'labels')
+    labels = GetDataFromIndex(as_json, 'labels')
     if labels is not None:
       story.AddLabelsFromArray(labels)
 
     return story
-
-  @staticmethod
-  def _GetDataFromIndex(json, index):
-    """Retrieve value associated with the index, if any.
-
-    Args:
-      json: JSON object
-      index: name of the desired index
-
-    Returns:
-      None (if index doesn't exist), empty string (if index exists, but value is
-      empty), or the index value.
-    """
-    if not index in json:
-      return None
-    elif not json[index]:
-      return ''
-    else:
-      return json.get(index)
 
   @staticmethod
   def _ParseDatetimeIntoSecs(data):
