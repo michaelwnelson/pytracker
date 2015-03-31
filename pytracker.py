@@ -171,13 +171,13 @@ class Story(object):
   are not lost.
   """
   def __init__(self):
-    self.attributes = ['id', 'project_id', 'name', 'description', 'story_type',
+    attributes = ['id', 'project_id', 'name', 'description', 'story_type',
       'current_state', 'estimate', 'accepted_at', 'deadline', 'requested_by_id',
       'requested_by_kind', 'requested_by_name', 'requested_by_email',
       'requested_by_initials', 'requested_by_username', 'owner_ids', 'labels',
       'created_at', 'updated_at', 'url', 'kind', 'iteration']
 
-    for attr in self.attributes:
+    for attr in attributes:
       setattr(self, attr, None)
 
   def __str__(self):
@@ -193,7 +193,7 @@ class Story(object):
       Story()
     """
     story = Story()
-    for attr in story.attributes:
+    for attr in vars(story):
       setattr(story, attr, GetDataFromIndex(as_json, attr))
 
     #
