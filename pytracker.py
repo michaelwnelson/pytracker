@@ -330,7 +330,7 @@ class Story(object):
     if self.labels is None:
       self.labels = set()
 
-    self.labels = self.labels.union([x["name"].strip() for x in labels])
+    self.labels = [x["name"].strip() for x in labels]
 
   def GetLabelsAsString(self):
     """Returns the labels as a comma delimited list of strings."""
