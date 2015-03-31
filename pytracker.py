@@ -32,8 +32,7 @@ DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v5/'
 class Tracker(object):
   """Tracker API."""
 
-  def __init__(self, project_id, token,
-               base_api_url=DEFAULT_BASE_API_URL):
+  def __init__(self, project_id, token, base_api_url=DEFAULT_BASE_API_URL):
     """Constructor.
 
     If you are debugging API calls, you may want to use a non-HTTPS API URL:
@@ -65,7 +64,6 @@ class Tracker(object):
       headers['X-TrackerToken'] = self.token
 
     if not body and method == 'GET':
-      # Do a GET
       req = urllib2.Request(url, None, headers)
     else:
       headers['Content-Type'] = 'application/json'
@@ -75,7 +73,8 @@ class Tracker(object):
     try:
       res = self.opener.open(req)
     except urllib2.HTTPError, e:
-      message = "HTTP Status Code: %s\nMessage: %s\nURL: %s\nError: %s" % (e.code, e.msg, e.geturl(), e.read())
+      message = "HTTP Status Code: %s\nMessage: %s\nURL: %s\nError: %s" % (
+        e.code, e.msg, e.geturl(), e.read())
       raise TrackerApiException(message)
 
     return res.read()
