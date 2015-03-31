@@ -85,7 +85,7 @@ class Tracker(object):
       output = self._Api('stories?fields=:default,requested_by&filter='
                 + urllib.quote_plus(query), 'GET')
     else:
-      output = self._Api('stories', 'GET')
+      output = self._Api('stories?fields=:default,requested_by', 'GET')
 
     """Confirm data is valid JSON.
 
