@@ -170,35 +170,15 @@ class Story(object):
   the Story must first be fetched from the server so that the existing labels
   are not lost.
   """
+  def __init__(self):
+    self.attributes = ['id', 'project_id', 'name', 'description', 'story_type',
+      'current_state', 'estimate', 'accepted_at', 'deadline', 'requested_by_id',
+      'requested_by_kind', 'requested_by_name', 'requested_by_email',
+      'requested_by_initials', 'requested_by_username', 'owner_ids', 'labels',
+      'created_at', 'updated_at', 'url', 'kind', 'iteration']
 
-  # Fields that can be treated as strings when embedding in JSON.
-  UPDATE_FIELDS = ('story_type', 'current_state', 'name',
-                   'description', 'estimate', 'requested_by', 'owned_by')
-
-  # Type: immutable ints.
-  story_id = None
-  iteration_number = None
-
-  # Type: immutable times (secs since epoch)
-  created_at = None
-
-  # Type: mutable time (secs since epoch)
-  deadline = None
-
-  # Type: mutable set (API methods expose as string)
-  labels = None
-
-  # Type: immutable strings
-  url = None
-
-  # Type: mutable strings
-  requested_by = None
-  owned_by = None
-  story_type = None
-  current_state = None
-  description = None
-  name = None
-  estimate = None
+    for attr in self.attributes:
+      setattr(self, attr, None)
 
   def __str__(self):
     return "Story(%r)" % self.__dict__
