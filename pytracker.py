@@ -193,39 +193,38 @@ class Story(object):
       Story()
     """
     story = Story()
-    story.story_id = GetDataFromIndex(as_json, 'id')
-    story.url = GetDataFromIndex(as_json, 'url')
-    story.owned_by = GetDataFromIndex(as_json, 'owner_ids')
+    for attr in story.attributes:
+      setattr(story, attr, GetDataFromIndex(as_json, attr))
 
-    # Create variables for all data available from requested_by
+    #
+    # Special handling for requested_by because by default Pivotal Tracker only
+    # provides the the ID of the person, and we want their name, email, etc.
+    #
+    # This is why we override all requests (re: _ApiQueryStories):
+    # ?fields=:default,requested_by
+    #
+    # Otherwise, we'd have to send another request to the /membership endpoint
+    # to then parse and find the person.
+    # Let's put that processing on Pivotal Tracker's servers ;)
+    #
     requested_by = GetDataFromIndex(as_json, 'requested_by')
-    story.requested_by_kind = GetDataFromIndex(requested_by, 'kind')
     story.requested_by_id = GetDataFromIndex(requested_by, 'id')
+    story.requested_by_kind = GetDataFromIndex(requested_by, 'kind')
     story.requested_by_name = GetDataFromIndex(requested_by, 'name')
     story.requested_by_email = GetDataFromIndex(requested_by, 'email')
     story.requested_by_initials = GetDataFromIndex(requested_by, 'initials')
     story.requested_by_username = GetDataFromIndex(requested_by, 'username')
 
-    iteration = GetDataFromIndex(as_json, 'number')
-    if iteration:
-      story.iteration_number = int(iteration)
-
-    story.SetStoryType(GetDataFromIndex(as_json, 'story_type'))
-    story.SetCurrentState(GetDataFromIndex(as_json, 'current_state'))
-    story.SetName(GetDataFromIndex(as_json, 'name'))
-    story.SetDescription(GetDataFromIndex(as_json, 'description'))
-
+    # Special handling for created_at to parse datetime
     created_at = GetDataFromIndex(as_json, 'created_at')
     story.created_at = Story._ParseDatetimeIntoSecs(created_at)
 
+    # Special handling for deadline to parse datetime
     deadline = GetDataFromIndex(as_json, 'deadline')
     if deadline:
       story.SetDeadline(Story._ParseDatetimeIntoSecs(deadline))
 
-    estimate = GetDataFromIndex(as_json, 'estimate')
-    if estimate is not None:
-      story.estimate = estimate
-
+    # Special handling for labels, we just want the "name"
     labels = GetDataFromIndex(as_json, 'labels')
     if labels is not None:
       story.AddLabelsFromArray(labels)
