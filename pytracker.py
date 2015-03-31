@@ -29,6 +29,24 @@ import json
 
 DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v5/'
 
+def GetDataFromIndex(data, index):
+  """Retrieve value associated with the index, if any.
+
+  Args:
+    data: JSON object
+    index: name of the desired index
+
+  Returns:
+    None (if index doesn't exist), empty string (if index exists, but value is
+    empty), or the index value.
+  """
+  if not index in data:
+    return None
+  elif not data[index]:
+    return ''
+  else:
+    return data.get(index)
+
 class Tracker(object):
   """Tracker API."""
 
