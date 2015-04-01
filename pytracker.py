@@ -158,17 +158,12 @@ class Story(object):
 
   This class can be used to represent a complete Story (generally queried from
   the Tracker class), or can contain partial information for update or create
-  operations (constructed with default constructor).
+  operations.
 
   Internally, Story uses None to indicate that the client has not specified a
   value for the field or that it has not been parsed from JSON.  This enables us
   to use the same Story object to define an update to multiple stories, without
   requiring that the client first fetch, parse, and update an existing story.
-  This is supported by all mutable fields except for labels, which are
-  represented by Tracker as a comma-separated list of strings in a single tag
-  body.  For label operations on existing stories to be performed correctly,
-  the Story must first be fetched from the server so that the existing labels
-  are not lost.
   """
   def __init__(self):
     attributes = ['id', 'project_id', 'name', 'description', 'story_type',
