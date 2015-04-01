@@ -208,14 +208,10 @@ class Story():
     self.requested_by_initials = GetDataFromIndex(requested_by, 'initials')
     self.requested_by_username = GetDataFromIndex(requested_by, 'username')
 
-    # Special handling for created_at to parse datetime
-    created_at = GetDataFromIndex(data, 'created_at')
-    self.created_at = ParseDatetimeIntoSecs(self, created_at)
-
-    # Special handling for deadline to parse datetime
-    deadline = GetDataFromIndex(data, 'deadline')
-    if deadline:
-      self.SetDeadline(ParseDatetimeIntoSecs(self, deadline))
+    # Special handling for attributes to parse datetime
+    self.created_at = ParseDatetimeIntoSecs(self, self.created_at)
+    self.updated_at = ParseDatetimeIntoSecs(self, self.updated_at)
+    self.deadline = ParseDatetimeIntoSecs(self, self.deadline)
 
     # Special handling for labels, we just want the "name"
     labels = GetDataFromIndex(data, 'labels')
