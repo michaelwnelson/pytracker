@@ -47,6 +47,17 @@ def GetDataFromIndex(data, index):
   else:
     return data.get(index)
 
+def ParseDatetimeIntoSecs(self, data):
+  """Returns the time parsed into seconds-since-epoch."""
+
+  if not data:
+    return None
+  # Tracker emits datetime strings in UTC or GMT.
+  # The [:-4] strips the timezone indicator
+  when = time.strptime(data[:-2], '%Y-%m-%dT%H:%M:%S')
+  # calendar.timegm treats the tuple as GMT
+  return calendar.timegm(when)
+
 class Tracker(object):
   """Tracker API."""
 
@@ -199,12 +210,12 @@ class Story():
 
     # Special handling for created_at to parse datetime
     created_at = GetDataFromIndex(data, 'created_at')
-    self.created_at = Story.ParseDatetimeIntoSecs(self, created_at)
+    self.created_at = ParseDatetimeIntoSecs(self, created_at)
 
     # Special handling for deadline to parse datetime
     deadline = GetDataFromIndex(data, 'deadline')
     if deadline:
-      self.SetDeadline(Story.ParseDatetimeIntoSecs(self, deadline))
+      self.SetDeadline(ParseDatetimeIntoSecs(self, deadline))
 
     # Special handling for labels, we just want the "name"
     labels = GetDataFromIndex(data, 'labels')
@@ -213,17 +224,6 @@ class Story():
 
   def __str__(self):
     return "Story(%r)" % self.__dict__
-
-  def ParseDatetimeIntoSecs(self, data):
-    """Returns the time parsed into seconds-since-epoch."""
-
-    if not data:
-      return None
-    # Tracker emits datetime strings in UTC or GMT.
-    # The [:-4] strips the timezone indicator
-    when = time.strptime(data[:-2], '%Y-%m-%dT%H:%M:%S')
-    # calendar.timegm treats the tuple as GMT
-    return calendar.timegm(when)
 
   def AddLabel(self, label):
     """Adds a label (see caveat in class comment)."""
