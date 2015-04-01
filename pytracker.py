@@ -155,10 +155,6 @@ class Tracker(object):
     comment = json.dumps({'text':comment})
     self._Api('stories/%d/comments' % int(story_id), 'POST', comment)
 
-  def DeleteStory(self, story_id):
-    """Deletes a story by story ID."""
-    self._Api('stories/%d' % story_id, 'DELETE', '')
-
 
 class TrackerApiException(Exception):
   """Raised when Tracker returns an error."""
