@@ -87,7 +87,13 @@ class Tracker(object):
 
   def _ValidateJson(self, data):
     """Confirm data is valid JSON.
-      json.loads throws a ValueError if the output is not valid JSON.
+
+    Args:
+      data: A JSON object.
+    Returns:
+      boolean: True or False if the JSON is valid.
+
+    json.loads throws a ValueError if the output is not valid JSON.
     """
     try:
       json.loads(data)
@@ -147,11 +153,24 @@ class Tracker(object):
     return lst
 
   def GetStory(self, story_id):
+    """Fetch a specific story by its ID.
+
+    Args:
+      story_id: A Story ID.
+    Returns:
+      A Story() object.
+    """
     data = self._ApiQueryStories('id:%d' % story_id)
     story = json.loads(data)
     return Story(story[0])
 
   def AddComment(self, story_id, comment):
+    """Add a comment to a Story.
+
+    Args:
+      story_id: A Story ID.
+      comment: A string that will be added a comment to the story.
+    """
     comment = json.dumps({'text':comment})
     self._Api('stories/%d/comments' % int(story_id), 'POST', comment)
 
