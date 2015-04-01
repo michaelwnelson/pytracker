@@ -131,14 +131,14 @@ class Tracker(object):
     stories = json.loads(data)
     lst = []
     for story in stories:
-      lst.append(Story.FromJson(story))
+      lst.append(Story(story))
 
     return lst
 
   def GetStory(self, story_id):
     data = self._ApiQueryStories('id:%d' % story_id)
     story = json.loads(data)
-    return Story.FromJson(story[0])
+    return Story(story[0])
 
   def AddComment(self, story_id, comment):
     comment = json.dumps({'text':comment})
