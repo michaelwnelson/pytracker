@@ -153,7 +153,7 @@ class TrackerApiException(Exception):
   """Raised when Tracker returns an error."""
 
 
-class Story(object):
+class Story():
   """Represents a Story.
 
   This class can be used to represent a complete Story (generally queried from
@@ -165,7 +165,10 @@ class Story(object):
   to use the same Story object to define an update to multiple stories, without
   requiring that the client first fetch, parse, and update an existing story.
   """
-  def __init__(self):
+
+  def __init__(self, data):
+    """Initialize Story attributes."""
+
     attributes = ['id', 'project_id', 'name', 'description', 'story_type',
       'current_state', 'estimate', 'accepted_at', 'deadline', 'requested_by_id',
       'requested_by_kind', 'requested_by_name', 'requested_by_email',
@@ -173,23 +176,7 @@ class Story(object):
       'created_at', 'updated_at', 'url', 'kind', 'iteration']
 
     for attr in attributes:
-      setattr(self, attr, None)
-
-  def __str__(self):
-    return "Story(%r)" % self.__dict__
-
-  @staticmethod
-  def FromJson(as_json):
-    """Parse a JSON string into a Story.
-
-    Args:
-      as_json: a full JSON object from the Tracker API.
-    Returns:
-      Story()
-    """
-    story = Story()
-    for attr in vars(story):
-      setattr(story, attr, GetDataFromIndex(as_json, attr))
+      setattr(self, attr, GetDataFromIndex(data, attr))
 
     #
     # Special handling for requested_by because by default Pivotal Tracker only
@@ -202,32 +189,32 @@ class Story(object):
     # to then parse and find the person.
     # Let's put that processing on Pivotal Tracker's servers ;)
     #
-    requested_by = GetDataFromIndex(as_json, 'requested_by')
-    story.requested_by_id = GetDataFromIndex(requested_by, 'id')
-    story.requested_by_kind = GetDataFromIndex(requested_by, 'kind')
-    story.requested_by_name = GetDataFromIndex(requested_by, 'name')
-    story.requested_by_email = GetDataFromIndex(requested_by, 'email')
-    story.requested_by_initials = GetDataFromIndex(requested_by, 'initials')
-    story.requested_by_username = GetDataFromIndex(requested_by, 'username')
+    requested_by = GetDataFromIndex(data, 'requested_by')
+    self.requested_by_id = GetDataFromIndex(requested_by, 'id')
+    self.requested_by_kind = GetDataFromIndex(requested_by, 'kind')
+    self.requested_by_name = GetDataFromIndex(requested_by, 'name')
+    self.requested_by_email = GetDataFromIndex(requested_by, 'email')
+    self.requested_by_initials = GetDataFromIndex(requested_by, 'initials')
+    self.requested_by_username = GetDataFromIndex(requested_by, 'username')
 
     # Special handling for created_at to parse datetime
-    created_at = GetDataFromIndex(as_json, 'created_at')
-    story.created_at = Story._ParseDatetimeIntoSecs(created_at)
+    created_at = GetDataFromIndex(data, 'created_at')
+    self.created_at = Story.ParseDatetimeIntoSecs(self, created_at)
 
     # Special handling for deadline to parse datetime
-    deadline = GetDataFromIndex(as_json, 'deadline')
+    deadline = GetDataFromIndex(data, 'deadline')
     if deadline:
-      story.SetDeadline(Story._ParseDatetimeIntoSecs(deadline))
+      self.SetDeadline(Story.ParseDatetimeIntoSecs(self, deadline))
 
     # Special handling for labels, we just want the "name"
-    labels = GetDataFromIndex(as_json, 'labels')
+    labels = GetDataFromIndex(data, 'labels')
     if labels is not None:
-      story.AddLabelsFromArray(labels)
+      self.AddLabelsFromArray(labels)
 
-    return story
+  def __str__(self):
+    return "Story(%r)" % self.__dict__
 
-  @staticmethod
-  def _ParseDatetimeIntoSecs(data):
+  def ParseDatetimeIntoSecs(self, data):
     """Returns the time parsed into seconds-since-epoch."""
 
     if not data:
