@@ -8,6 +8,24 @@ The original pytracker was developed by Doug Coker. [You can view the project he
 
 I've forked the project because it is no longer being maintained (the last commit was [Nov 30, 2010][4]). Furthermore, when this was originally developed it was intended for use with v2 of Pivotal Tracker's API which has been [disabled since January 27, 2012][5].
 
+## Example
+```
+#!/usr/bin/python
+try:
+	from pytracker import Tracker
+	from pytracker import Story
+except ImportError:
+	raise ImportError("Requires pytracker module.")
+
+project = #YOUR PROJECT ID
+token = #YOUR API TOKEN
+tracker = Tracker(int(project), token)
+story = tracker.GetStory(123456789)
+stories = tracker.GetStories('label:example')
+```
+
+A `Story()` has `__str__` defined, so you're welcome to `print story` at this point. Moreover, you can access the attributes you see from `print story` easily: `print story.id`.
+
 ## Contributing
 * ~~Convert from XML to JSON~~
 * Add missing resources and endpoints
