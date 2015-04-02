@@ -8,13 +8,11 @@ The original pytracker was developed by Doug Coker. [You can view the project he
 
 I've forked the project because it is no longer being maintained (the last commit was [Nov 30, 2010][4]). Furthermore, when this was originally developed it was intended for use with v2 of Pivotal Tracker's API which has been [disabled since January 27, 2012][5].
 
-The goal of this project is to bring the library up-to-date with v5 of Pivtoal Tracker's API and utilize the existing methods.
-
-Once the project is functioning as expected with v5, I'll look in to extending existing or creating new features.
-
 ## Contributing
-Currently the goal is to convert everything from XML to JSON.
-There are new endpoints to utilize in v5 and eventually the application will be extended to utilize them.
+* ~~Convert from XML to JSON~~
+* Add missing resources and endpoints
+* Add create, update, delete for resources
+
 If you would like to contribute a new feature or bug fix:
 
 1. Fork it
