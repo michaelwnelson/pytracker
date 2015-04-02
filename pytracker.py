@@ -184,6 +184,22 @@ class Tracker(object):
 
     return lst
 
+  def GetStoryComments(self, story_id):
+    """Fetch all comments for a given Story ID.
+
+    Args:
+      story_id: A Story ID.
+    Returns:
+      List of Comment().
+    """
+    data = self._ApiQueryStoryComments(story_id)
+    comments = json.loads(data)
+    lst = []
+    for comment in comments:
+      lst.append(Comment(comment))
+
+    return lst
+
   def AddComment(self, story_id, comment):
     """Add a comment to a Story.
 
