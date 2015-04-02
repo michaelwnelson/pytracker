@@ -140,6 +140,12 @@ class Tracker(object):
     if(self._ValidateJson(output)):
       return output
 
+  def _ApiQueryStoryComments(self, story_id):
+    output = self._Api('stories/%d/comments' % story_id, 'GET')
+
+    if(self._ValidateJson(output)):
+      return output
+
   def GetStories(self, filt=None):
     """Fetch all Stories that satisfy the filter.
 
