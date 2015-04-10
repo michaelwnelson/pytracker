@@ -146,6 +146,15 @@ class Tracker(object):
     if(self._ValidateJson(output)):
       return output
 
+  def _ApiQueryStoryActivity(self, story_id, query=None):
+    if query:
+      output = self._Api('stories/%d/activity?%s' % (story_id, query), 'GET')
+    else:
+      output = self._Api('stories/%d/activity' % story_id, 'GET')
+
+    if(self._ValidateJson(output)):
+      return output
+
   def GetStories(self, filt=None):
     """Fetch all Stories that satisfy the filter.
 
