@@ -194,6 +194,41 @@ class Person():
   def __str__(self):
     return "Person(%r)" % self.__dict__
 
+class ProjectMemberships():
+  """Represents the Project Memberships.
+
+  This class can be used to represent a complete Project Memebership.
+
+  Internally, ProjectMemberships will be used to cross-reference a person_id
+  with a Person to retrive information such as their name, email, etc.
+  """
+
+  def __init__(self, data):
+    """Initialize Project Membership attributes."""
+
+    attributes = ['id', 'person', 'project_id', 'role', 'project_color',
+      'last_viewed_at', 'wants_comment_notification_emails',
+      'will_receive_mention_notifications_or_emails', 'kind']
+
+    for attr in attributes:
+      setattr(self, attr, GetDataFromIndex(data, attr))
+
+    # Special handling for last_viewed_at to parse datetime
+    self.last_viewed_at = ParseDatetimeIntoSecs(self, self.last_viewed_at)
+
+    #
+    # The person may be a person_id or person resource. If we have a resource,
+    # pass the data to Person(), otherwise store the person_id.
+    #
+    person_data = GetDataFromIndex(data, 'person')
+    if isinstance(person_data, dict):
+      self.person = Person(person_data)
+    else:
+      self.person = person_data
+
+  def __str__(self):
+    return "ProjectMemberships(%r)" % self.__dict__
+
 class Story():
   """Represents a Story.
 
