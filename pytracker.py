@@ -209,6 +209,15 @@ class Tracker(object):
 
     return lst
 
+  def GetStoryActivity(self, story_id, query=None):
+    data = self._ApiQueryStoryActivity(story_id, query)
+    activities = json.loads(data)
+    lst = []
+    for activity in activities:
+      lst.append(Activity(activity))
+
+    return lst
+
   def AddComment(self, story_id, comment):
     """Add a comment to a Story.
 
