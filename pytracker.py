@@ -178,6 +178,21 @@ class Tracker(object):
 class TrackerApiException(Exception):
   """Raised when Tracker returns an error."""
 
+class Person():
+  """Represents a person.
+
+  This class can be used to represet a Person.
+  """
+
+  def __init__(self, data):
+    """Initialize Activity attributes."""
+    attributes = ['id', 'name', 'email', 'initials', 'username', 'kind']
+
+    for attr in attributes:
+      setattr(self, attr, GetDataFromIndex(data, attr))
+
+  def __str__(self):
+    return "Person(%r)" % self.__dict__
 
 class Story():
   """Represents a Story.
