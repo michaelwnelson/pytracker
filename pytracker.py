@@ -128,10 +128,9 @@ class Tracker(object):
 
   def _ApiQueryStories(self, query=None):
     if query:
-      output = self._Api('stories?fields=:default,requested_by&filter='
-                + urllib.quote_plus(query), 'GET')
+      output = self._Api('stories?filter='+ urllib.quote_plus(query), 'GET')
     else:
-      output = self._Api('stories?fields=:default,requested_by', 'GET')
+      output = self._Api('stories', 'GET')
 
     if(self._ValidateJson(output)):
       return output
