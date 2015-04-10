@@ -169,6 +169,16 @@ class Tracker(object):
     story = json.loads(data)
     return Story(story[0])
 
+  def GetProjectMemberships(self):
+    """Fetch project memberships"""
+    data = self._ApiQueryMemberships()
+    memberships = json.loads(data)
+    lst = []
+    for member in memberships:
+      lst.append(ProjectMemberships(member))
+
+    return lst
+
   def AddComment(self, story_id, comment):
     """Add a comment to a Story.
 
