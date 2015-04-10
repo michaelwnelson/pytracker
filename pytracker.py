@@ -269,31 +269,10 @@ class Story():
 
     attributes = ['id', 'project_id', 'name', 'description', 'story_type',
       'current_state', 'estimate', 'accepted_at', 'deadline', 'requested_by_id',
-      'requested_by_kind', 'requested_by_name', 'requested_by_email',
-      'requested_by_initials', 'requested_by_username', 'owner_ids', 'labels',
-      'created_at', 'updated_at', 'url', 'kind', 'iteration']
+      'owner_ids', 'labels', 'created_at', 'updated_at', 'url', 'kind']
 
     for attr in attributes:
       setattr(self, attr, GetDataFromIndex(data, attr))
-
-    #
-    # Special handling for requested_by because by default Pivotal Tracker only
-    # provides the the ID of the person, and we want their name, email, etc.
-    #
-    # This is why we override all requests (re: _ApiQueryStories):
-    # ?fields=:default,requested_by
-    #
-    # Otherwise, we'd have to send another request to the /membership endpoint
-    # to then parse and find the person.
-    # Let's put that processing on Pivotal Tracker's servers ;)
-    #
-    requested_by = GetDataFromIndex(data, 'requested_by')
-    self.requested_by_id = GetDataFromIndex(requested_by, 'id')
-    self.requested_by_kind = GetDataFromIndex(requested_by, 'kind')
-    self.requested_by_name = GetDataFromIndex(requested_by, 'name')
-    self.requested_by_email = GetDataFromIndex(requested_by, 'email')
-    self.requested_by_initials = GetDataFromIndex(requested_by, 'initials')
-    self.requested_by_username = GetDataFromIndex(requested_by, 'username')
 
     # Special handling for attributes to parse datetime
     self.created_at = ParseDatetimeIntoSecs(self, self.created_at)
