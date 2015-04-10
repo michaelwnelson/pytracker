@@ -164,9 +164,9 @@ class Tracker(object):
     Returns:
       A Story() object.
     """
-    data = self._ApiQueryStories('id:%d' % story_id)
+    data = self._Api('/stories/%d' % story_id, 'GET')
     story = json.loads(data)
-    return Story(story[0])
+    return Story(story)
 
   def GetProjectMemberships(self):
     """Fetch project memberships"""
