@@ -136,6 +136,11 @@ class Tracker(object):
     if(self._ValidateJson(output)):
       return output
 
+  def _ApiQueryMemberships(self):
+    output = self._Api('memberships', 'GET')
+    if(self._ValidateJson(output)):
+      return output
+
   def GetStories(self, filt=None):
     """Fetch all Stories that satisfy the filter.
 
