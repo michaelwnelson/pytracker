@@ -295,44 +295,22 @@ class ProjectMemberships():
     else:
       self.person = person_data
 
-  def __str__(self):
-    return "ProjectMemberships(%r)" % self.__dict__
-
-class Story():
-  """Represents a Story.
-
-  This class can be used to represent a complete Story (generally queried from
-  the Tracker class), or can contain partial information for update or create
-  operations.
-
-  Internally, Story uses None to indicate that the client has not specified a
-  value for the field or that it has not been parsed from JSON.  This enables us
-  to use the same Story object to define an update to multiple stories, without
-  requiring that the client first fetch, parse, and update an existing story.
-  """
-
+class Story(Resource):
   def __init__(self, data):
-    """Initialize Story attributes."""
-
     attributes = ['id', 'project_id', 'name', 'description', 'story_type',
       'current_state', 'estimate', 'accepted_at', 'deadline', 'requested_by_id',
       'owner_ids', 'labels', 'created_at', 'updated_at', 'url', 'kind']
-
-    for attr in attributes:
-      setattr(self, attr, GetDataFromIndex(data, attr))
+    super(Story, self).__init__(attributes, data)
 
     # Special handling for attributes to parse datetime
-    self.created_at = ParseDatetimeIntoSecs(self, self.created_at)
-    self.updated_at = ParseDatetimeIntoSecs(self, self.updated_at)
-    self.deadline = ParseDatetimeIntoSecs(self, self.deadline)
+    self.created_at = self.ParseDatetimeIntoSecs(self.created_at)
+    self.updated_at = self.ParseDatetimeIntoSecs(self.updated_at)
+    self.deadline =self.ParseDatetimeIntoSecs(self.deadline)
 
     # Special handling for labels, we just want the "name"
-    labels = GetDataFromIndex(data, 'labels')
+    labels = self.GetDataFromIndex(data, 'labels')
     if labels is not None:
       self.AddLabelsFromArray(labels)
-
-  def __str__(self):
-    return "Story(%r)" % self.__dict__
 
   def AddLabel(self, label):
     """Adds a label (see caveat in class comment)."""
