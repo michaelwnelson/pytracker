@@ -254,7 +254,7 @@ class Person(Resource):
     attributes = ['id', 'name', 'email', 'initials', 'username', 'kind']
     super(Person, self).__init__(attributes, data)
 
-class ProjectMemberships():
+class ProjectMemberships(Resource):
   """Represents the Project Memberships.
 
   This class can be used to represent a complete Project Memebership.
@@ -264,23 +264,19 @@ class ProjectMemberships():
   """
 
   def __init__(self, data):
-    """Initialize Project Membership attributes."""
-
     attributes = ['id', 'person', 'project_id', 'role', 'project_color',
       'last_viewed_at', 'wants_comment_notification_emails',
       'will_receive_mention_notifications_or_emails', 'kind']
-
-    for attr in attributes:
-      setattr(self, attr, GetDataFromIndex(data, attr))
+    super(ProjectMemberships, self).__init__(attributes, data)
 
     # Special handling for last_viewed_at to parse datetime
-    self.last_viewed_at = ParseDatetimeIntoSecs(self, self.last_viewed_at)
+    self.last_viewed_at = self.ParseDatetimeIntoSecs(self.last_viewed_at)
 
     #
     # The person may be a person_id or person resource. If we have a resource,
     # pass the data to Person(), otherwise store the person_id.
     #
-    person_data = GetDataFromIndex(data, 'person')
+    person_data = self.GetDataFromIndex(data, 'person')
     if isinstance(person_data, dict):
       self.person = Person(person_data)
     else:
