@@ -350,7 +350,7 @@ class Comment(Resource):
     self.created_at = self.ParseDatetimeIntoSecs(self.created_at)
     self.updated_at = self.ParseDatetimeIntoSecs(self.updated_at)
 
-class Activity():
+class Activity(Resource):
   """Represents an Activity.
 
   There are four different Activity endpoints. Their parameters are all common.
@@ -361,38 +361,8 @@ class Activity():
   order, so that the first activity in a response indicates the most recently
   made modification to the project.
 
-  Project Activity
-    All of the activity (over the selected period) that affected the project
-    whose ID is included in the request path, regardless of who took the actions
-    that caused the activity or what resources within the project were modified.
-    This endpoint returns information equivalent to the "Project History" panel
-    in Pivotal Tracker's native web UI.
-
-  Story Activity
-    All of the activity (over the selected period) that affected the single
-    story identified by the request path. This will always be a subset of the
-    activity for the story's project over the same period, and is equivalent to
-    the content of a story-specific History panel in Pivotal Tracker.
-
-  Epic Activity
-    All of the activity (over the selected period) that affected the single epic
-    identified by the request path. This will always be a subset of the activity
-    for the story's project over the same period, and is equivalent to the
-    content of a story-specific History panel in Pivotal Tracker.
-    Note that the activities returned by this endpoint are ones that affected
-    the epic directly. This endpoint does not return the collective activity for
-    all of the stories contained in an epic.
-
-  User Activity
-    All of the activity (over the selected period) that was instigated by the
-    user whose authentication credentials were used to make the request. Unlike
-    the three other activity endpoints, this endpoint can return activity from
-    a variety of projects. In this case, activity structures continue to be
-    returned in reverse chronologic order over all, regardless of the relative
-    version number sequences in the different projects.
-
-  Internally, Activity is completely immutable. Therefore, activity data can
-  only be retrieved about a content.
+  To read more about the four different endpoint:
+  https://www.pivotaltracker.com/help/api#Activity_Information
   """
 
   def __init__(self, data):
@@ -401,12 +371,7 @@ class Activity():
     attributes = ['kind', 'guid', 'project_version', 'message', 'highlight',
       'changes', 'primary_resource', 'project_id', 'performed_by_id',
       'occurred_at']
-
-    for attr in attributes:
-      setattr(self, attr, GetDataFromIndex(data, attr))
+    super(Activity, self).__init__(attributes, data)
 
     # Special handling for attributes to parse datetime
-    self.occurred_at = ParseDatetimeIntoSecs(self, self.occurred_at)
-
-  def __str__(self):
-    return "Activity(%r)" % self.__dict__
+    self.occurred_at = self.ParseDatetimeIntoSecs(self.occurred_at)
