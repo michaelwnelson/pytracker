@@ -330,7 +330,7 @@ class Story(Resource):
     lst.sort()
     return ','.join(lst)
 
-class Comment():
+class Comment(Resource):
   """Represents a Comment.
 
   This class can be used to represent a complete Comment or be used to create a
@@ -341,21 +341,14 @@ class Comment():
   """
 
   def __init__(self, data):
-    """Initialize Comment attributes."""
-
     attributes = ['id', 'story_id', 'epic_id', 'text', 'person_id',
       'created_at', 'updated_at', 'file_attachment_ids',
       'google_attachment_ids', 'commit_identifier', 'commit_type', 'kind']
-
-    for attr in attributes:
-      setattr(self, attr, GetDataFromIndex(data, attr))
+    super(Comment, self).__init__(attributes, data)
 
     # Special handling for attributes to parse datetime
-    self.created_at = ParseDatetimeIntoSecs(self, self.created_at)
-    self.updated_at = ParseDatetimeIntoSecs(self, self.updated_at)
-
-  def __str__(self):
-    return "Comment(%r)" % self.__dict__
+    self.created_at = self.ParseDatetimeIntoSecs(self.created_at)
+    self.updated_at = self.ParseDatetimeIntoSecs(self.updated_at)
 
 class Activity():
   """Represents an Activity.
