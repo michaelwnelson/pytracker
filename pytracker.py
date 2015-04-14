@@ -29,34 +29,42 @@ import json
 
 DEFAULT_BASE_API_URL = 'https://www.pivotaltracker.com/services/v5/'
 
-def GetDataFromIndex(data, index):
-  """Retrieve value associated with the index, if any.
+class Resource(object):
+  def __init__(self, attributes, data):
+    for attr in attributes:
+      setattr(self, attr, self.GetDataFromIndex(data, attr))
 
-  Args:
-    data: JSON object
-    index: name of the desired index
+  def __str__(self):
+    return "%s(%r)" % (self.kind.upper(), self.__dict__)
 
-  Returns:
-    None (if index doesn't exist), empty string (if index exists, but value is
-    empty), or the index value.
-  """
-  if not index in data:
-    return None
-  elif not data[index]:
-    return ''
-  else:
-    return data.get(index)
+  def GetDataFromIndex(self, data, index):
+    """Retrieve value associated with the index, if any.
 
-def ParseDatetimeIntoSecs(self, data):
-  """Returns the time parsed into seconds-since-epoch."""
+    Args:
+      data: JSON object
+      index: name of the desired index
 
-  if not data:
-    return None
-  # Tracker emits datetime strings in UTC or GMT.
-  # The [:-4] strips the timezone indicator
-  when = time.strptime(data[:-2], '%Y-%m-%dT%H:%M:%S')
-  # calendar.timegm treats the tuple as GMT
-  return calendar.timegm(when)
+    Returns:
+      None (if index doesn't exist), empty string (if index exists, but
+      value is empty), or the index value.
+    """
+    if not index in data:
+      return None
+    elif not data[index]:
+      return ''
+    else:
+      return data.get(index)
+
+  def ParseDatetimeIntoSecs(self, data):
+    """Returns the time parsed into seconds-since-epoch."""
+
+    if not data:
+      return None
+    # Tracker emits datetime strings in UTC or GMT.
+    # The [:-4] strips the timezone indicator
+    when = time.strptime(data[:-2], '%Y-%m-%dT%H:%M:%S')
+    # calendar.timegm treats the tuple as GMT
+    return calendar.timegm(when)
 
 class Tracker(object):
   """Tracker API."""
