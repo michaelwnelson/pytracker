@@ -21,7 +21,6 @@ __maintainer__ = 'michaelwnelson (Michael Nelson)'
 
 import calendar
 import cookielib
-import re
 import time
 import urllib
 import urllib2
@@ -242,7 +241,6 @@ class Tracker(object):
       if m.person.id == id:
         return m.person
     return None
-
 
 class TrackerApiException(Exception):
   """Raised when Tracker returns an error."""
