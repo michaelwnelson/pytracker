@@ -142,15 +142,6 @@ class Tracker(object):
     if(self._ValidateJson(output)):
       return output
 
-  def _ApiQueryStories(self, query=None):
-    if query:
-      output = self._Api('stories?filter='+ urllib.quote_plus(query), 'GET')
-    else:
-      output = self._Api('stories', 'GET')
-
-    if(self._ValidateJson(output)):
-      return output
-
   def _ApiQueryMemberships(self):
     output = self._Api('memberships', 'GET')
     if(self._ValidateJson(output)):
@@ -179,7 +170,11 @@ class Tracker(object):
     Returns:
       List of Story().
     """
-    data = self._ApiQueryStories(filt)
+    if filt:
+      data = self._ApiWrapper('stories', '?filter='+ urllib.quote_plus(query))
+    else:
+      data = self._ApiWrapper('stories')
+
     stories = json.loads(data)
     lst = []
     for story in stories:
