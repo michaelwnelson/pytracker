@@ -142,11 +142,6 @@ class Tracker(object):
     if(self._ValidateJson(output)):
       return output
 
-  def _ApiQueryMemberships(self):
-    output = self._Api('memberships', 'GET')
-    if(self._ValidateJson(output)):
-      return output
-
   def _ApiQueryStoryComments(self, story_id):
     output = self._Api('stories/%d/comments' % story_id, 'GET')
 
@@ -196,12 +191,11 @@ class Tracker(object):
 
   def GetProjectMemberships(self):
     """Fetch project memberships"""
-    data = self._ApiQueryMemberships()
+    data = self._ApiWrapper('memberships')
     memberships = json.loads(data)
     lst = []
     for member in memberships:
       lst.append(ProjectMemberships(member))
-
     return lst
 
   def GetStoryComments(self, story_id):
