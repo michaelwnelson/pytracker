@@ -133,6 +133,15 @@ class Tracker(object):
 
     return res.read()
 
+  def _ApiWrapper(self, endpoint, query=None):
+    if query:
+      output = self._Api(endpoint + urllib.quote_plus(query), 'GET')
+    else:
+      output = self._Api(endpoint, 'GET')
+
+    if(self._ValidateJson(output)):
+      return output
+
   def _ApiQueryStories(self, query=None):
     if query:
       output = self._Api('stories?filter='+ urllib.quote_plus(query), 'GET')
