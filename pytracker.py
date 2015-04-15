@@ -142,12 +142,6 @@ class Tracker(object):
     if(self._ValidateJson(output)):
       return output
 
-  def _ApiQueryStoryComments(self, story_id):
-    output = self._Api('stories/%d/comments' % story_id, 'GET')
-
-    if(self._ValidateJson(output)):
-      return output
-
   def _ApiQueryStoryActivity(self, story_id, query=None):
     if query:
       output = self._Api('stories/%d/activity?%s' % (story_id, query), 'GET')
@@ -206,7 +200,7 @@ class Tracker(object):
     Returns:
       List of Comment().
     """
-    data = self._ApiQueryStoryComments(story_id)
+    data = self._ApiWrapper('stories/%d/comments' % story_id)
     comments = json.loads(data)
     lst = []
     for comment in comments:
