@@ -235,7 +235,7 @@ class Tracker(object):
     comment = json.dumps({'text':comment})
     self._Api('stories/%d/comments' % int(story_id), 'POST', comment)
 
-  def getPersonById(self, memberships, id):
+  def GetPersonById(self, memberships, id):
     """Search the provided memberships for the given id and return the Person"""
     for m in memberships:
       if m.person.id == id:
