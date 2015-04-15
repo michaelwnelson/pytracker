@@ -190,7 +190,7 @@ class Tracker(object):
     Returns:
       A Story() object.
     """
-    data = self._Api('/stories/%d' % story_id, 'GET')
+    data = self._ApiWrapper('stories/%d' % story_id)
     story = json.loads(data)
     return Story(story)
 
