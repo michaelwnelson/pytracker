@@ -151,7 +151,7 @@ class Tracker(object):
       List of Story().
     """
     if filt:
-      data = self._ApiWrapper('stories', '?filter='+ urllib.quote_plus(query))
+      data = self._ApiWrapper('stories', '?filter='+ urllib.quote_plus(filt))
     else:
       data = self._ApiWrapper('stories')
 
