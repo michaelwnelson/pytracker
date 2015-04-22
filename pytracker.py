@@ -135,7 +135,7 @@ class Tracker(object):
 
   def _ApiWrapper(self, endpoint, query=None):
     if query:
-      output = self._Api(endpoint + urllib.quote_plus(query), 'GET')
+      output = self._Api(endpoint + query, 'GET')
     else:
       output = self._Api(endpoint, 'GET')
 
